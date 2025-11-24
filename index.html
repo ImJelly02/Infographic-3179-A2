@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Displaced: Refugees in Malaysia</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.16.3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap"
+            rel="stylesheet">
+
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+
+        <!-- Reference source: https://kube.io/blog/liquid-glass-css-svg/ -->
+        <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
+            <defs>
+                <filter id="liquidGlassFilterId" x="-50%" y="-50%" width="200%"
+                    height="200%">
+
+                    <feturbulence type="fractalNoise" baseFrequency="0.002"
+                        numOctaves="3" result="noise" />
+
+                    <fedisplacementmap in="SourceGraphic" in2="noise" scale="20"
+                        xChannelSelector="R" yChannelSelector="G"
+                        result="distorted" />
+
+                    <fespecularlighting in="noise" surfaceScale="5"
+                        specularConstant="1.2" specularExponent="20"
+                        lighting-color="rgba(255,255,255,0.8)" result="shine">
+                        <fepointlight x="100" y="-100" z="200" />
+                    </fespecularlighting>
+
+                    <fecomposite in="shine" in2="distorted"
+                        operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+
+                </filter>
+            </defs>
+        </svg>
+
+        <div class="smooth-wrapper">
+            <header class="hero-section">
+                <div class="hero-content">
+                    <div
+                        class="bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer">
+                        FIT3179 Assignment 2: AN INFOGRAPHIC
+                    </div>
+                    <h1 class="reveal-text">Where Do They<br>Come From?</h1>
+                    <p class="subtitle reveal-text">An analysis of the 191,470
+                        refugees seeking safe haven in Malaysia.</p>
+                </div>
+                <div class="scroll-indicator">↓</div>
+            </header>
+
+            <main>
+                <section class="content-block">
+                    <div class="text-wrapper reveal-text">
+                        <span class="section-label">01. The Origins</span>
+                        <h2>Mapping the Displacement</h2>
+                        <p><mark class="text-highlight">Malaysia continues to be a destination for displaced communities</mark> seeking safety 
+                            and escaping conflict, persecution, and humanitarian crises.<br> As of August 2024, 
+                            displacement flows into Southeast Asia are <mark class="text-highlight">driven largely by crises in Asia and 
+                            Africa</mark>, with <mark class="text-highlight">Myanmar</mark> representing the single <mark class="text-highlight">largest source of refugees</mark>. 
+                            Smaller movements also emerge from regions such as Europe (Russia) and Oceania (Australia and Fiji), reflecting that displacement into Malaysia is not only regional but global. <br>
+                            <br>The map on the right illustrates these diverse pathways of displacement into Malaysia in 20 years, from 2003 to 2023.</p>
+
+                        <div class="stat-box bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer"
+                            style="padding: 1.5rem; display: inline-block;">
+                            <span class="big-number">169k</span>
+                            <span class="stat-label">Refugees from
+                                Myanmar.<br>Mostly Chin & Rohingya</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-wrapper glass-panel reveal-chart">
+                        <div id="map" class="vis-container"></div>
+                    </div>
+                </section>
+
+                <section class="content-block">
+                    <div class="chart-wrapper glass-panel reveal-chart">
+                        <div id="word_cloud" class="vis-container"></div>
+                    </div>
+                    <div class="text-wrapper reveal-text">
+                        <span class="section-label">02. Demographics</span>
+                        <h2>A Voice for the Rohingya</h2>
+                        <p>The Rohingya constitute the <mark class="text-highlight">largest refugee community in Malaysia</mark>, 
+                            arriving after decades of persecution and statelessness. 
+                            Although Malaysia hosts significant refugee populations, 
+                            <mark class="text-highlight">the government does not operate a formal asylum system</mark>. As a result, 
+                            refugees and asylum-seekers can be only <mark class="text-highlight">registered and supported primarily through the UNHCR</mark>.<br>
+                            <br>The presence of a large undocumented refugee population has affected <mark class="text-highlight">local social and economic tensions</mark>, 
+                            shaping public discourse and <mark class="text-highlight">local resentment over time</mark>.
+                            At the same time, the Rohingya community remains facing <mark class="text-highlight">limited access to legal employment, education, and social protection</mark>, 
+                            leaving many in precarious circumstances<br>
+                            <br>The failure of handling refugees and undocumented migrants underscore the need for <mark class="text-highlight">shared responsibility and long-term solutions</mark> to displacement within the region.</p>
+                    </div>
+                </section>
+
+                <section class="timeline-section glass-panel">
+                    <div class="timeline-header reveal-text">
+                        <span class="section-label">03. History</span>
+                        <h2>Crisis Timeline (2000 - 2023)</h2>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+
+                        <div class="timeline-item left reveal-item">
+                            <div class="date">2003</div>
+                            <div
+                                class="content bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer"
+                                style="padding: 1.5rem;">
+                                <h3>Iraq War</h3>
+                                <p>Conflict triggered significant displacement
+                                    from the Middle East.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item right reveal-item">
+                            <div class="date">2014</div>
+                            <div
+                                class="content bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer"
+                                style="padding: 1.5rem;">
+                                <h3>Syrian Civil War</h3>
+                                <p>Escalation led to one of the largest modern
+                                    refugee crises.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item left reveal-item">
+                            <div class="date">2017</div>
+                            <div
+                                class="content bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer"
+                                style="padding: 1.5rem;">
+                                <h3>Myanmar Genocide</h3>
+                                <p>Over 700,000 Rohingya fled violence and
+                                    persecution.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item right reveal-item">
+                            <div class="date">2021</div>
+                            <div
+                                class="content bg-[#fef08a] text-gray-800 px-8 py-3 shadow-lg transform -rotate-1 border border-yellow-300 rounded-sm font-handwriting text-xl pointer-events-auto transition hover:rotate-0 cursor-pointer"
+                                style="padding: 1.5rem;">
+                                <h3>Taliban Takeover</h3>
+                                <p>Withdrawal of forces led to a new wave of
+                                    Afghan refugees.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-block">
+                    <div class="text-wrapper reveal-text">
+                        <span class="section-label">04. Status</span>
+                        <h2>Refugees & Stateless Persons</h2>
+                        <p> Malaysia continues to see a <mark class="text-highlight">steady rise in people registered with the UNHCR</mark>, 
+                            including both refugees and asylum-seekers. 
+                            The numbers have increased significantly <mark class="text-highlight">over the past two decades</mark>, 
+                            reflecting ongoing regional instability and prolonged displacement.<br>
+                            
+                            <br>Beyond refugee communities, Malaysia hosts a significant
+                            stateless population. In 2023, In 2023, <mark class="text-highlight">nearly 9,400 
+                            individuals were recorded as stateless</mark>. These are the people who are not refugees 
+                            but <mark class="text-highlight">lack the documentation needed to establish nationality.</mark></p>
+                    </div>
+                    <div class="chart-wrapper glass-panel reveal-chart">
+                        <div id="bar_chart" class="vis-container"></div>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="infographic-footer">
+                <p>Visualization by <strong>Yeoh Sin Yee</strong></p>
+                <p class="source">Data Source: <a href="https://www.unhcr.org/"
+                        target="_blank">UNHCR Refugee Statistics</a></p>
+            </footer>
+        </div>
+
+        <script>
+        // Initialize Lenis for Smooth Scrolling
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate Text
+        const textElements = document.querySelectorAll('.reveal-text');
+        textElements.forEach(text => {
+            gsap.fromTo(text, 
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: text,
+                        start: 'top 85%',
+                    }
+                }
+            );
+        });
+
+        // Animate Charts (Scale up slightly and fade in)
+        const charts = document.querySelectorAll('.reveal-chart');
+        charts.forEach(chart => {
+            gsap.fromTo(chart, 
+                { scale: 0.98, opacity: 0 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: chart,
+                        start: 'top 80%',
+                    }
+                }
+            );
+        });
+
+        // Animate Timeline Items
+        const timelineItems = document.querySelectorAll('.reveal-item');
+        timelineItems.forEach(item => {
+            gsap.fromTo(item,
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 85%'
+                    }
+                }
+            );
+        });
+
+        // Highlight Animation. Source: https://codepen.io/hexagoncircle/pen/gOPMwvd
+        gsap.utils.toArray(".text-highlight").forEach((highlight) => {
+            ScrollTrigger.create({
+                trigger: highlight,
+                start: "top 85%", 
+                onEnter: () => highlight.classList.add("active") 
+            });
+        });
+
+        // Embed Vega Visualizations
+        const vegaOptions = { 
+            actions: false, 
+            renderer: 'canvas', 
+            config: { background: null } 
+        };
+
+        vegaEmbed('#map', 'map_spec.json', vegaOptions).then(() => console.log("Map loaded")).catch(console.error);
+        vegaEmbed('#word_cloud', 'word_cloud.json', vegaOptions).then(() => console.log("Wordcloud loaded")).catch(console.error);
+        vegaEmbed('#bar_chart', 'bar_chart.json', vegaOptions).then(() => console.log("Barchart loaded")).catch(console.error);
+    </script>
+    </body>
+</html>

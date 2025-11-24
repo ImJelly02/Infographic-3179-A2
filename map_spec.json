@@ -1,0 +1,105 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 500,
+  "background": null,
+  "view": {"stroke": "transparent"},
+  "params": [
+    {
+      "name": "year",
+      "value": 2011,
+      "bind": {
+        "input": "range",
+        "min": 2003,
+        "max": 2023,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "mercator",
+    "scale": 120,
+    "center": [70, 30],
+    "clipExtent": [[0, 0], [800, 500]]
+  },
+  "layer": [
+    {
+      "data": {"sphere": true},
+      "mark": {"type": "geoshape", "fill": "transparent", "stroke": "#d1d1d1", "strokeWidth": 1}
+    },
+    {
+      "data": {"graticule": true},
+      "mark": {"type": "geoshape", "stroke": "#e0e0e0", "strokeWidth": 0.5}
+    },
+    {
+      "data": {
+        "url": "ne_110m.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "#e6e6e6", "stroke": "white", "strokeWidth": 0.5}
+    },
+    {
+      "data": {
+        "url": "DataProcessing/cleaned_population_new.csv"
+      },
+      "transform": [
+        {"filter": "datum.year == year"},
+        {"filter": "datum.refugees_under_unhcr_mandate > 0"},
+        {"filter": "datum.longitude_origin != null && datum.latitude_origin != null"}
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "stroke": "#D45D79",
+            "opacity": 0.1,
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "longitude": {"field": "longitude_origin"},
+            "latitude": {"field": "latitude_origin"},
+            "longitude2": {"datum": 101.97},
+            "latitude2": {"datum": 4.21}
+          }
+        },
+        {
+          "params": [
+            {
+              "name": "user_zoom",
+              "select": {"type": "interval", "bind": "scales"}
+            }
+          ],
+          "mark": {
+            "type": "circle",
+            "opacity": 0.6,
+            "stroke": "white",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "longitude": {"field": "longitude_origin"},
+            "latitude": {"field": "latitude_origin"},
+            "size": {
+              "field": "refugees_under_unhcr_mandate",
+              "type": "quantitative",
+              "scale": {
+                "type": "symlog", 
+                "constant": 10,
+                "range": [10, 350] 
+              },
+              "legend": {"title": "Refugees (Log Scale)"}
+            },
+            "color": {
+              "value": "#D45D79"
+            },
+            "tooltip": [
+              {"field": "country_of_origin", "title": "Origin"},
+              {"field": "refugees_under_unhcr_mandate", "title": "Refugees under UNHCR", "format": ","},
+              {"field": "asylum_seekers", "title": "Asylum Seekers", "format": ","}
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
